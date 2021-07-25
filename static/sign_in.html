@@ -1,0 +1,110 @@
+<html>
+    <head>
+        <link rel='stylesheet' href='./Styles/sign_up.css'>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Permanent+Marker&display=swap" rel="stylesheet">
+        <script>
+            async function digestMessage(message) {
+                const msgUint8 = new TextEncoder().encode(message);                           // encode as (utf-8) Uint8Array
+                const hashBuffer = await crypto.subtle.digest('SHA-256', msgUint8);           // hash the message
+                const hashArray = Array.from(new Uint8Array(hashBuffer));                     // convert buffer to byte array
+                const hashHex = hashArray.map(b => b.toString(16).padStart(2, '0')).join(''); // convert bytes to hex string
+                return hashHex;
+            }
+            
+            async function signIn() {
+                var email = window.document.getElementById("email").value;
+                if (email ==="") {
+                    email_error = document.getElementById("email_error")
+                    email_error.style.color = 'red'
+                    email_error.innerHTML = "Enter valid email"
+                    return;
+                } 
+
+                const hash = digestMessage(window.document.getElementById("password").value);
+                digestMessage(window.document.getElementById("password").value).then(digestHex => 
+                    window.location = "http://127.0.0.1:5000/signin_server?email="+String(email)+"&password="+String(digestHex)
+                );
+            }
+        </script>
+        <style>
+            .labels {
+                font-family: 'Montserrat', sans-serif;
+                font-size: 20pt;
+                float: left;
+            }
+            html, 
+            body {
+                height: 100%;
+                width: 99%;
+            }
+            .error_message {
+                float: right;
+                color: white;
+            }
+
+            .btn {
+            box-sizing: border-box;
+            -webkit-appearance: none;
+                -moz-appearance: none;
+                    appearance: none;
+            background-color: transparent;
+            border: 4px solid rgb(38, 28, 85);
+            border-radius: 0.6em;
+            color: rgb(38, 28, 85);
+            cursor: pointer;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-align-self: center;
+                -ms-flex-item-align: center;
+                    align-self: center;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1;
+            margin: 20px;
+            padding: 1.2em 2.8em;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            }
+            .btn:hover, .btn:focus {
+            color: #fff;
+            outline: 0;
+            }
+
+            .first {
+            -webkit-transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+            transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+            }
+            .first:hover {
+            box-shadow: 0 0 40px 40px rgb(38, 28, 85) inset;
+            color:white;
+            }
+        </style>
+    </head>
+    <body>
+        <div class='row' style='height:100%; width=100%;'>
+            <div class='col-4' style='background-color: rgb(38, 28, 85);'>
+                <h1 style='font-family: "La Belle Aurore", cursive; font-size: 50pt;color: white;padding-left: 10%;padding-top: 10%;'>Lazy Professor</h1>
+                <img src="./static/resources/Scientific_citations.png" style='height: 60%; width: 95%; transform: translate(45%, 15%); z-index: 0;'>
+            </div>
+            <div class='col-7' style='z-index: 2; background-color: white;'>
+                <h1 style='text-align: center;font-family: "Montserrat", sans-serif;padding-bottom: 10%; color: rgb(38, 28, 85); font-size: 40pt;'> Sign in to your account</h1>
+                
+                <label for="email" class='labels'>Email:</label> <p id="email_error" class="error_message">Email already in use</p><br>
+                <input type="email" class="form-control" id="email" aria-describedby="emailHelp" placeholder="Enter email"><br>
+                <label for="password" class='labels'>Password:</label> <p id="password_error" class="error_message">Password not valid</p><br>
+                <input type="password" class="form-control" id="password" placeholder="Password"><br>
+
+                <button class="btn first" onclick="signIn()">Sign In</button>
+            </div>
+        </div>
+    </body>
+</html>

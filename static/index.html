@@ -1,18 +1,105 @@
 <html>
     <head>
+        <link rel='stylesheet' href='./Styles/index.css'>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+        <link href="https://fonts.googleapis.com/css2?family=La+Belle+Aurore&family=Permanent+Marker&display=swap" rel="stylesheet">
+        <script>
+            function signIn() {
+                window.location = "/signin"
+            }
+            function signUp() {
+                window.location = "/signup"
+            }
 
+
+        </script>
+        
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@1,500&display=swap');
+            
+            html, 
+            body {
+                height: 100%;
+            }
+
+            .centered {
+                position: fixed;
+                top: 15%;
+                left: 50%;
+                /* bring your own prefixes */
+                transform: translate(-50%, -50%);
+            }
+
+            .btn {
+            box-sizing: border-box;
+            -webkit-appearance: none;
+                -moz-appearance: none;
+                    appearance: none;
+            background-color: transparent;
+            border: 2px solid #ffffff;
+            border-radius: 0.6em;
+            color: #ffffff;
+            cursor: pointer;
+            display: -webkit-box;
+            display: -webkit-flex;
+            display: -ms-flexbox;
+            display: flex;
+            -webkit-align-self: center;
+                -ms-flex-item-align: center;
+                    align-self: center;
+            font-size: 1rem;
+            font-weight: 400;
+            line-height: 1;
+            margin: 20px;
+            padding: 1.2em 2.8em;
+            text-decoration: none;
+            text-align: center;
+            text-transform: uppercase;
+            font-family: 'Montserrat', sans-serif;
+            font-weight: 700;
+            }
+            .btn:hover, .btn:focus {
+            color: #fff;
+            outline: 0;
+            }
+
+            .first {
+            -webkit-transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+            transition: box-shadow 300ms ease-in-out, color 300ms ease-in-out;
+            }
+            .first:hover {
+            box-shadow: 0 0 40px 40px #ffffff inset;
+            color:rgb(38, 28, 85);
+            }
+        </style>
     </head>
-
-    <header>
-
-    </header>
     <body>
-        <h1>Lazy Professor</h1>
-        <p>Curated feed of recent research papers from arxiv</p>
-
-        <div id='paper_output'> 
+        <div class='row' style='height:100%'>
+            <div class='col-4' style=''>
+                <h1 style="font-family: 'Montserrat', sans-serif; transform: translate(10%, 70%);">Todays Popular Papers:</h1>
+                </br>
+                <div id='paper_output'>
+                    
+                </div>
+        
+            </div>
+            <div class='col-8' style='background-color: rgb(38, 28, 85);'>
+                <div style="transform: translate(20%, 150%);">
+                    <div style='display: inline-block; padding-bottom: 2%;'>
+                        <h1 style="color:white;font-size: 80pt;float:left;font-family: 'La Belle Aurore', cursive;">Lazy Professor</h1> 
+                        
+                    </div>
+                    <p style="color:white;font-size: 20pt;font-family: 'Montserrat', sans-serif;">Scientific articles curated for you</p>
+                    <div>
+                        <button onclick="signIn()" class="btn first" style='float: left; margin-right: 3%;'>Sign In</button>
+                        <button onclick="signUp()" class="btn first" style='float: left; margin-right: 3%;'>Sign Up</button>
+                    </div>
+                    
+                </div>
+                
+            </div>
         </div>
-
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js" integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM" crossorigin="anonymous"></script>
     </body>
     
 </html>
