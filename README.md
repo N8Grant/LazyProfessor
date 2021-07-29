@@ -4,13 +4,13 @@ Lazy Professor is intended to be a research paper curator. Because of the large 
 
 ## To-Do
 - User sign up
-- - Need to collect more data about the user to get better initial suggestions
-- - Also need to get data about user institudaion and experience to make better user suggestions
+    - Need to collect more data about the user to get better initial suggestions
+    - Also need to get data about user institudaion and experience to make better user suggestions
 - User feed 
-- - Need to make a good menu on the side
-- - Limit number of suggestions and make pagination
+    - Need to make a good menu on the side
+    - Limit number of suggestions and make pagination
 - Make a user display page with information about their interactions and such
 - Database stuff
-- - Followers and following fields
+    - Followers and following fields
 - Modeling 
-- - Collect data from interactions up to a certain point then use neural method
+    - Collect data from interactions up to a certain point then use neural method

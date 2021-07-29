@@ -142,14 +142,18 @@ def add_user(email,username,password_hash):
     if username_exists != 0:
         return "username_in_use"
     
-    result =db.insert_one({"email":email,"username":username,"password":password_hash,
-                               "last_date_updated":datetime.now(),"recently_viewed":[],
-                                 "papers_read":0,"average_title":[[0 for i in range(768)]],
-                               "average_abstract":[[0 for i in range(768)]],
-                               "title_weights": [.5],
-                               "saved_papers": [],
-                               "following": [],
-                               "followers": []})
+    result = db.insert_one({"email":email,
+                           "username":username,
+                           "password":password_hash,
+                           "last_date_updated":datetime.now(),
+                           "recently_viewed":[],
+                           "papers_read":0,
+                           "average_title":[[0 for i in range(768)]],
+                           "average_abstract":[[0 for i in range(768)]],
+                           "title_weights": [.5],
+                           "saved_papers": [],
+                           "following": [],
+                           "followers": []})
     return str(result.inserted_id)
     
 def delete_docs():
@@ -232,18 +236,19 @@ def get_user_by_id(user_id):
     return user
 
 def curate_results(embeddings,average_title,average_abstract,title_weights,num_papers):
+    num_results = 40
     ids = [e["_id"] for e in embeddings]
     title_embeddings = [e["title_embedding"][0] for e in embeddings]
     abstract_embeddings = [e["abstract_embedding"][0] for e in embeddings]
     
     ## Get closest title embeddings
     title_tree = BallTree(np.array(title_embeddings))
-    title_dist, title_positions = title_tree.query(average_title,k=100)
+    title_dist, title_positions = title_tree.query(average_title,k=num_results)
     title_dist, title_positions = title_dist[0].tolist(), title_positions[0].tolist()
     
     ## Get closest abstract embeddings
     abstract_tree = BallTree(np.array(abstract_embeddings))
-    abstract_dist, abstract_positions = abstract_tree.query(average_abstract,k=100)
+    abstract_dist, abstract_positions = abstract_tree.query(average_abstract,k=num_results)
     abstract_dist, abstract_positions = abstract_dist[0].tolist(), abstract_positions[0].tolist()
     
     # Get random weights
@@ -312,7 +317,33 @@ def get_papers(user_id):
              {"$sort": {"__order": 1}}])
     
     return {'result':list(papers)},weights
+
+def search_results(query, database):
+    client = MongoClient(URI)
     
+    if database == "papers":
+        db = client.papers.papers
+    else:
+        db = client.papers.users
+        
+    retults = db.find(
+       { "$text": { "$search": query } },
+       { "score": { "$meta": "textScore" } }
+    ).sort( { "score": { "$meta": "textScore" } } )
+    
+    results_list = []
+    
+    for r in list(results):
+        # need to return title or username information along with object ids
+        # need to make an index oer titles and usernames
+        
+        if database =="papers":
+            results_list.append({"name": r["title"],"ref":r["_id"]})
+        else:
+            results_list.append({"name": r["username"],"ref": r["_id"]})
+            
+    return {"results": results_list}
+
 def mean_pooling(model_output, attention_mask):
     token_embeddings = model_output[0] #First element of model_output contains all token embeddings
     input_mask_expanded = attention_mask.unsqueeze(-1).expand(token_embeddings.size()).float()
@@ -329,7 +360,7 @@ def get_embedding(model, tokenizer, text):
     
     return sentence_embeddings.numpy()
 
-    
+
     
 if __name__ == "__main__":
     arg = str(sys.argv[1:][0])
